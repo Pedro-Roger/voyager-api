@@ -6,9 +6,9 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 ## Status
 
-- Estado atual: planejamento inicial
+- Estado atual: design aprovado, aguardando revisão do spec
 - Última atualização: 2026-08-28
-- Última parada: fase 0, definição inicial do produto e criação dos repositórios
+- Última parada: spec da fase 1 da API escrito; próximo passo = revisão do spec e plano de implementação
 
 ## Stack
 
@@ -92,4 +92,4 @@ Sempre que uma fase subir:
 
 ## Próximo passo
 
-Definir arquitetura API e estratégia Prisma + Knex sem duplicar regra de negócio.
+Revisar spec da fundação da API e gerar plano de implementação TDD.
