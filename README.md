@@ -6,9 +6,9 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 ## Status
 
-- Estado atual: fase 1 concluída
-- Última atualização: 2026-08-29
-- Última parada: fundação da API entregue com NestJS, config, healthcheck, Prisma e Knex; próximo passo = fase 2, banco base e seed dev
+- Estado atual: fase 2 concluída
+- Última atualização: 2026-08-28
+- Última parada: banco base entregue com schema Prisma inicial, seed dev protegida e modelos de organização, usuário, sessão e auditoria; próximo passo = fase 3, autenticação, refresh token e RBAC
 
 ## Stack
 
@@ -28,7 +28,7 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 - [x] Fase 0: criar repositório público e roadmap inicial
 - [x] Fase 1: arquitetura API, módulos, convenções, config, healthcheck
-- [ ] Fase 2: banco base PostgreSQL, Prisma, Knex, migrations, seed dev
+- [x] Fase 2: banco base PostgreSQL, Prisma, Knex, migrations, seed dev
 - [ ] Fase 3: autenticação, refresh token, RBAC, isolamento por organização
 - [ ] Fase 4: auditoria, requestId, erros padronizados, logs estruturados
 - [ ] Fase 5: módulo municípios e unidades
@@ -92,4 +92,4 @@ Sempre que uma fase subir:
 
 ## Próximo passo
 
-Executar fase 2: expandir banco base PostgreSQL, migrations e seed de desenvolvimento.
+Executar fase 3: autenticação, refresh token, RBAC e isolamento por organização.
