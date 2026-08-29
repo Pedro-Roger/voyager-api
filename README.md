@@ -7,8 +7,8 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 ## Status
 
 - Estado atual: fase 3 concluída
-- Última atualização: 2026-08-28
-- Última parada: autenticação base entregue com login, refresh token rotativo em memória, RBAC inicial e bloqueio cross-organization; próximo passo = fase 4, auditoria, requestId e erros padronizados
+- Última atualização: 2026-08-29
+- Última parada: fundação de relatórios WhatsApp entregue com Evolution API, webhook idempotente em memória, outbox PostgreSQL, retry e migration; próximo passo = persistir webhook, executar worker contínuo e conectar dados operacionais reais
 
 ## Stack
 
@@ -42,6 +42,22 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 - [ ] Fase 13: notificações e adapters externos
 - [ ] Fase 14: observabilidade, jobs e operação
 - [ ] Fase 15: testes integração, E2E e hardening
+
+## Trilha WhatsApp
+
+- [x] compositor determinístico de resumo diário
+- [x] adapter de envio de texto para Evolution API
+- [x] contrato `POST /webhooks/evolution` com segredo compartilhado
+- [x] deduplicação inicial de webhook em memória
+- [x] schema e migration para automações, relatórios, entregas e webhooks
+- [x] outbox com idempotência por organização
+- [x] claim concorrente com `FOR UPDATE SKIP LOCKED`
+- [x] retry exponencial e limite de cinco tentativas
+- [ ] persistência do webhook usando `WebhookEvent`
+- [ ] worker contínuo para reivindicar e processar entregas
+- [ ] consultas Knex com dados reais dos módulos operacionais
+- [ ] configuração de automações pelo frontend
+- [ ] validação com uma instância Evolution conectada
 
 ## Módulos da API
 
@@ -92,4 +108,4 @@ Sempre que uma fase subir:
 
 ## Próximo passo
 
-Executar fase 4: auditoria, requestId, erros padronizados e logs estruturados.
+Persistir webhooks, executar worker da outbox e conectar o primeiro relatório aos dados operacionais reais.

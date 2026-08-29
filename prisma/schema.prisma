@@ -8,11 +8,15 @@ datasource db {
 }
 
 model Organization {
-  id        String   @id @default(uuid()) @db.Uuid
-  name      String
-  users     User[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String              @id @default(uuid()) @db.Uuid
+  name               String
+  users              User[]
+  automations        Automation[]
+  operationalReports OperationalReport[]
+  whatsappDeliveries WhatsAppDelivery[]
+  webhookEvents      WebhookEvent[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model User {
@@ -33,14 +37,14 @@ model User {
 }
 
 model RefreshSession {
-  id           String   @id @default(uuid()) @db.Uuid
-  userId       String   @db.Uuid
-  tokenHash    String
-  expiresAt    DateTime
-  revokedAt    DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id])
 
   @@index([userId, expiresAt])
 }
@@ -58,4 +62,110 @@ model AuditLog {
 
   @@index([organizationId, createdAt])
   @@index([entityType, entityId])
+}
+
+enum AutomationFrequency {
+  DAILY
+  WEEKLY
+}
+
+enum ReportType {
+  DAILY_OPERATIONAL
+  WEEKLY_OPERATIONAL
+  ON_DEMAND
+}
+
+enum ReportStatus {
+  GENERATED
+  QUEUED
+  DELIVERED
+  FAILED
+}
+
+enum DeliveryStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model Automation {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @db.Uuid
+  name           String
+  frequency      AutomationFrequency
+  timezone       String
+  recipients     Json
+  nextRunAt      DateTime
+  lastRunAt      DateTime?
+  active         Boolean             @default(true)
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  organization   Organization        @relation(fields: [organizationId], references: [id])
+  reports        OperationalReport[]
+
+  @@index([organizationId, nextRunAt, active])
+}
+
+model OperationalReport {
+  id             String             @id @default(uuid()) @db.Uuid
+  organizationId String             @db.Uuid
+  automationId   String?            @db.Uuid
+  type           ReportType
+  status         ReportStatus       @default(GENERATED)
+  periodStart    DateTime
+  periodEnd      DateTime
+  content        String
+  metrics        Json
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  organization   Organization       @relation(fields: [organizationId], references: [id])
+  automation     Automation?        @relation(fields: [automationId], references: [id])
+  deliveries     WhatsAppDelivery[]
+
+  @@index([organizationId, createdAt])
+  @@index([automationId, createdAt])
+}
+
+model WhatsAppDelivery {
+  id                String            @id @default(uuid()) @db.Uuid
+  organizationId    String            @db.Uuid
+  reportId          String            @db.Uuid
+  recipient         String
+  message           String
+  idempotencyKey    String
+  status            DeliveryStatus    @default(PENDING)
+  attempts          Int               @default(0)
+  nextAttemptAt     DateTime          @default(now())
+  workerId          String?
+  startedAt         DateTime?
+  sentAt            DateTime?
+  failedAt          DateTime?
+  providerMessageId String?
+  lastError         String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  organization      Organization      @relation(fields: [organizationId], references: [id])
+  report            OperationalReport @relation(fields: [reportId], references: [id])
+
+  @@unique([organizationId, idempotencyKey])
+  @@index([status, nextAttemptAt, createdAt])
+  @@index([organizationId, status, createdAt])
+  @@index([reportId])
+}
+
+model WebhookEvent {
+  id              String       @id @default(uuid()) @db.Uuid
+  organizationId  String       @db.Uuid
+  provider        String
+  providerEventId String
+  eventType       String
+  payload         Json
+  processedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([provider, providerEventId])
+  @@index([organizationId, createdAt])
+  @@index([processedAt, createdAt])
 }
