@@ -6,9 +6,9 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 ## Status
 
-- Estado atual: fase 3 em andamento
-- Última atualização: 2026-08-29
-- Última parada: login dev controlado entregue com endpoint `/auth/login`, emissão de tokens opacos e base de módulo auth; próximo passo = concluir fase 3 com refresh token, RBAC e isolamento por organização
+- Estado atual: fase 3 concluída
+- Última atualização: 2026-08-28
+- Última parada: autenticação base entregue com login, refresh token rotativo em memória, RBAC inicial e bloqueio cross-organization; próximo passo = fase 4, auditoria, requestId e erros padronizados
 
 ## Stack
 
@@ -29,7 +29,7 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 - [x] Fase 0: criar repositório público e roadmap inicial
 - [x] Fase 1: arquitetura API, módulos, convenções, config, healthcheck
 - [x] Fase 2: banco base PostgreSQL, Prisma, Knex, migrations, seed dev
-- [ ] Fase 3: autenticação, refresh token, RBAC, isolamento por organização
+- [x] Fase 3: autenticação, refresh token, RBAC, isolamento por organização
 - [ ] Fase 4: auditoria, requestId, erros padronizados, logs estruturados
 - [ ] Fase 5: módulo municípios e unidades
 - [ ] Fase 6: módulo convênios e projetos
@@ -92,4 +92,4 @@ Sempre que uma fase subir:
 
 ## Próximo passo
 
-Continuar fase 3: adicionar refresh token, RBAC e isolamento por organização.
+Executar fase 4: auditoria, requestId, erros padronizados e logs estruturados.
