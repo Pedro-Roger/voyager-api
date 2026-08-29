@@ -15,7 +15,7 @@ async function main() {
       users: {
         create: {
           id: '00000000-0000-0000-0000-000000000002',
-          email: 'admin@voyager.local',
+          email: 'admin@voyager.test',
           fullName: 'Voyager Admin',
           passwordHash: 'dev-password-hash',
         },

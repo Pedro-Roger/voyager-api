@@ -6,9 +6,9 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 ## Status
 
-- Estado atual: fase 2 concluída
-- Última atualização: 2026-08-28
-- Última parada: banco base entregue com schema Prisma inicial, seed dev protegida e modelos de organização, usuário, sessão e auditoria; próximo passo = fase 3, autenticação, refresh token e RBAC
+- Estado atual: fase 3 em andamento
+- Última atualização: 2026-08-29
+- Última parada: login dev controlado entregue com endpoint `/auth/login`, emissão de tokens opacos e base de módulo auth; próximo passo = concluir fase 3 com refresh token, RBAC e isolamento por organização
 
 ## Stack
 
@@ -92,4 +92,4 @@ Sempre que uma fase subir:
 
 ## Próximo passo
 
-Executar fase 3: autenticação, refresh token, RBAC e isolamento por organização.
+Continuar fase 3: adicionar refresh token, RBAC e isolamento por organização.
