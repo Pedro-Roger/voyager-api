@@ -10,6 +10,7 @@ import { EvolutionWebhookService, InMemoryWebhookEventStore } from './evolution-
       useFactory: () => new EvolutionWebhookService(
         new InMemoryWebhookEventStore(),
         process.env.EVOLUTION_WEBHOOK_SECRET ?? '',
+        process.env.EVOLUTION_API_KEY ?? '',
       ),
     },
   ],

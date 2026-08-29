@@ -3,7 +3,11 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 export type EvolutionWebhookPayload = {
   eventId?: string;
   event?: string;
-  data?: unknown;
+  apikey?: string;
+  data?: {
+    key?: { id?: string };
+    [key: string]: unknown;
+  };
   [key: string]: unknown;
 };
 
@@ -28,19 +32,24 @@ export class EvolutionWebhookService {
   constructor(
     private readonly store: WebhookEventStore,
     private readonly sharedSecret: string,
+    private readonly apiKey = '',
   ) {}
 
   async receive(secret: string | undefined, payload: EvolutionWebhookPayload) {
-    if (!this.sharedSecret || secret !== this.sharedSecret) {
+    const authenticatedByHeader = Boolean(this.sharedSecret && secret === this.sharedSecret);
+    const authenticatedByEvolution = Boolean(this.apiKey && payload.apikey === this.apiKey);
+    if (!authenticatedByHeader && !authenticatedByEvolution) {
       throw new UnauthorizedException('Invalid Evolution webhook secret');
     }
-    if (!payload.eventId || !payload.event) {
-      throw new BadRequestException('Evolution webhook requires eventId and event');
+    const providerEventId = payload.eventId ?? payload.data?.key?.id;
+    if (!providerEventId || !payload.event) {
+      throw new BadRequestException('Evolution webhook requires an event id and event');
     }
-    if (await this.store.has(payload.eventId)) {
+    if (await this.store.has(providerEventId)) {
       return { accepted: true, duplicate: true };
     }
-    await this.store.add(payload.eventId, payload);
+    const { apikey: _apiKey, ...safePayload } = payload;
+    await this.store.add(providerEventId, safePayload);
     return { accepted: true, duplicate: false };
   }
 }

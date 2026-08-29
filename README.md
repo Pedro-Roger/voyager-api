@@ -8,7 +8,7 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 - Estado atual: fase 3 concluída
 - Última atualização: 2026-08-29
-- Última parada: fundação de relatórios WhatsApp entregue com Evolution API, webhook idempotente em memória, outbox PostgreSQL, retry e migration; próximo passo = persistir webhook, executar worker contínuo e conectar dados operacionais reais
+- Última parada: webhook nativo da Evolution 2.3.6 validado da instância conectada até a API Voyager, com autenticação pela chave do provedor, remoção da chave antes do armazenamento e idempotência pelo ID da mensagem; próximo passo = persistir webhook e executar worker contínuo
 
 ## Stack
 
@@ -47,7 +47,7 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 
 - [x] compositor determinístico de resumo diário
 - [x] adapter de envio de texto para Evolution API
-- [x] contrato `POST /webhooks/evolution` com segredo compartilhado
+- [x] contrato `POST /webhooks/evolution` compatível com payload nativo da Evolution
 - [x] deduplicação inicial de webhook em memória
 - [x] schema e migration para automações, relatórios, entregas e webhooks
 - [x] outbox com idempotência por organização
@@ -57,7 +57,7 @@ Voyager = observador operacional. Papel: coordenar atividades, receber dados, co
 - [ ] worker contínuo para reivindicar e processar entregas
 - [ ] consultas Knex com dados reais dos módulos operacionais
 - [ ] configuração de automações pelo frontend
-- [ ] validação com uma instância Evolution conectada
+- [x] validação com uma instância Evolution conectada
 
 ## Módulos da API
 
